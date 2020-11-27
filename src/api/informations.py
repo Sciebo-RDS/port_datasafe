@@ -3,12 +3,12 @@ from RDS import FileTransferMode, LoginMode
 
 def index():
     data = {
-        "fileTransferArchive":False,
+        "fileTransferArchive":"zip",
         "fileTransferMode":FileTransferMode.passive,
         "loginMode":LoginMode.credentials,
         "credentials": {
-            "userId":True,
-            "password":True
+            "userId":False,
+            "password":False
         }
     }
     return jsonify(data)
