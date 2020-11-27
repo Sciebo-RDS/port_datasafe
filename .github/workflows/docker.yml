@@ -44,7 +44,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: heiss/port_datasafe:latest,ref=heiss/port_datasafe:${{ GITHUB_RUN_NUMBER }}
+          tags: heiss/port_datasafe:latest,ref=heiss/port_datasafe:$GITHUB_RUN_NUMBER
           tag-sha: true
           cache-from: type=registry,ref=heiss/port_datasafe:latest
           cache-to: type=inline
