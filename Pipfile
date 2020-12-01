@@ -15,6 +15,7 @@ gevent = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
 connexion-plus = "*"
 pyld = "*"
+research-data-services-common = {extras = ["flask"], version = "*"}
 
 [requires]
 python_version = "3.8"
