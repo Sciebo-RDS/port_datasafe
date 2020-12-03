@@ -1,6 +1,9 @@
 import logging
 import os
-from lib.Util import require_api_key
+import json
+import requests
+from lib.Util import loadAccessToken
+from lib.datasafe import Datasafe
 from flask import jsonify, request, g, abort
 from io import BytesIO, BufferedReader
 
@@ -19,24 +22,51 @@ def get(project_id, file_id):
     return jsonify(fileslist[file_id])
 
 
-@require_api_key
 def post(project_id):
-    logger.debug("Read file from request")
-    file = request.files["file"]
+    # trigger upload on datasafe
+    try:
+        req = request.get_json(force=True, cache=True)
+    except:
+        req = request.form.to_dict()
 
-    req = request.form.to_dict()
-    filename = req["filename"]
-    logger.debug("file: {}, filename: {}".format(file, filename))
+    data = {
+        "filepath": "{}/ro-crate-metadata.json".format(req["folder"]),
+        "userId": req["userId"]
+    }
 
-    logger.debug("Start file upload")
-
-    g.osf.project(project_id).storage().create_file(
-        filename, BufferedReader(file), force=True
+    metadata = json.loads(
+        BytesIO(
+            requests.get(
+                "http://circle1-{}/storage/file".format("port-owncloud"),
+                json=data,
+                verify=(os.environ.get("VERIFY_SSL", "True") == "True"),
+            ).content
+        )
+        .read()
+        .decode("UTF-8")
     )
 
-    logger.debug("Finished file upload")
+    token = loadAccessToken(req["userId"], "Owncloud")
+    url = os.getenv("OWNCLOUD_INSTALLATION_PATH")
+    url = "{}/index.php/apps/rds/mailAddress".format(url)
+
+    headers = {"Authorization": "Bearer {}".format(token)}
+    email = request.get(url, headers=headers).json().get("email")
+
+    datasafe = Datasafe(
+        email,
+        token,
+        req["folder"],
+        os.getenv("DATASAFE_PUBLICKEY"),
+        os.getenv("DATASAFE_PRIVATEKEY")
+    )
+
+    logger.debug("Trigger file upload")
+    datasafe.triggerUploadForProject()
+    logger.debug("Finished trigger")
 
     return jsonify({"success": True}), 200
+
 
 @require_api_key
 def patch(project_id, file_id):

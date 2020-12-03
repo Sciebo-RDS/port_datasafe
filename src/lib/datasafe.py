@@ -1,9 +1,10 @@
 import requests
 import jwt
 from requests_jwt import JWTAuth, payload_path, payload_method, payload_body
+from lib.Util import from_jsonld, loadAccessToken
 
 class Datasafe():
-    def __init__(self, email, token, folder, public_key, private_key, address=None):
+    def __init__(self, metadata, token, folder, public_key, private_key, address=None):
         self.email = email
         if "@" not in self.email:
             raise ValueError("email not valid.")
@@ -20,10 +21,21 @@ class Datasafe():
 
         self.metadata = None
 
-        self.public_key = public_key
-        self.private_key = private_key
+        self._public_key = public_key
+        self._private_key = private_key
 
-        auth = JWTAuth(self.private_key, alg='HS256')
+        auth = JWTAuth(self._private_key, alg='HS256')
+
+        metadata = from_jsonld(metadata)
+
+        self._metadata = {
+            "dataCiteMetadata": metadata,
+            "administrativeMetadata": {
+                "authorizedPersons": [metadata["creators"][0]],
+                "curatingPersons": [metadata["creators"][0]],
+                "dataSupplier": [metadata["creators"][0]]
+            }
+        }
 
         auth.add_field("iss", "https://www.ulb.uni-muenster.de")
         auth.add_field("sub", "24400320")
@@ -35,26 +47,12 @@ class Datasafe():
         self._session = requests.Session()
         self._session.auth = auth
 
-    def setMetadata(self, metadata):
-        # TODO: transform json-ld to datasafe
-        self.metadata = metadata
-
-        return self
-
-    def getProjects(self):
-        pass
-
-    def getProject(self, id):
-        pass
-
-    def createProject(self, title):
-        pass
-
-    def deleteFilesInProject(self, id):
-        pass
-
-    def triggerFileForProject(self, id):
-        if self.metadata is None:
+    @property
+    def metadata(self):
+        return self._metadata
+    
+    def triggerUploadForProject(self):
+        if self._metadata is None or not isinstance(self._metadata, dict):
             raise ValueError("metadata is not set.")
 
         data = {
@@ -65,9 +63,9 @@ class Datasafe():
                 "serverName": "https://sciebords.uni-muenster.de",
                 "token": "Bearer {}".format(self.token)
             },
-            "metadata": self.metadata
+            "metadata": self._metadata
         }
 
         req = self._session.get("{}/big-file-transfer/api/v1/transfer/start".format(self.address), data=data)
 
-        return jwt.decode(req.text(), self.public_key, algorithms='HS256')
+        return jwt.decode(req.text(), self._public_key, algorithms=self._session.auth.alg)

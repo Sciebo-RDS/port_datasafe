@@ -3,15 +3,28 @@
         "https://w3id.org/ro/crate/1.0/context",
         {
             "@vocab": "https://schema.org/",
-            "osfcategory": "https://www.research-data-services.org/jsonld/osfcategory",
-            "category": {
-                "@id": "osfcategory"
-            }
+            "resource": "zenodocategory"
         }
     ],
     "@explicit": "true",
     "@type": "Dataset",
-    "name": {},
-    "category": {},
-    "description": {}
+    "titles": [],
+    "creators": {
+        "@type": "Person",
+        "affiliation": {
+            "@type": "Organization"
+        }
+    },
+    "publisher": {
+        "@type": "Person",
+        "affiliation": {
+            "@type": "Organization"
+        }
+    },
+    "resource": {},
+    "publicationYear": {
+        "dateTime": {},
+        "dateTimeScheme": "COMPLETE_DATE",
+        "dateType": "Submitted"
+    }
 }

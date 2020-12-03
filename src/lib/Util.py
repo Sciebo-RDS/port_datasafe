@@ -1,6 +1,5 @@
 from functools import wraps
 from flask import request, g, current_app, abort
-from osfclient import OSF
 import os
 import requests
 import logging
@@ -53,42 +52,66 @@ def require_api_key(api_method):
         logger.debug("req data: {}".format(req))
 
         if apiKey is None and userId is not None:
-            apiKey = loadAccessToken(userId, "Openscienceframework")
+            apiKey = loadAccessToken(userId, "Owncloud")
 
         if apiKey is None:
             logger.error("apiKey or userId not found.")
             abort(401)
 
         logger.debug("found apiKey")
-        g.osf = OSF(
-            token=apiKey,
-            address=os.getenv(
-                "OPENSCIENCEFRAMEWORK_API_ADDRESS", "https://api.test.osf.io/v2"
-            ),
-        )
+        g.apiKey = apiKey
 
         return api_method(*args, **kwargs)
 
     return check_api_key
 
 
-def from_jsonld(req):
-    logger.debug("before transformation data: {}".format(req))
+def from_jsonld(jsonld_data):
+    if jsonld_data is None:
+        return
 
     try:
-        frame = json.load(open("src/lib/fosf.jsonld"))
+        frame = json.load(open("src/lib/fdatasafe.jsonld"))
     except:
-        frame = json.load(open("lib/fosf.jsonld"))
+        frame = json.load(open("lib/fdatasafe.jsonld"))
 
-    logger.debug("used frame: {}".format(frame))
+    done = jsonld.frame(jsonld_data, frame)
+    print("after framing: {}".format(done))
 
-    done = jsonld.frame(req, frame)
-    logger.debug("after framing data: {}".format(done))
-
-    done["title"] = done["name"]
+    done["titles"] = [{"title": done["name"]}]
     del done["name"]
 
-    done["description"] = done["description"].replace("\n", " ")
+
+    done["publicationYear"]: {
+            "dateTime": done["datePublished"],
+            "dateTimeScheme": "COMPLETE_DATE",
+            "dateType": "Submitted"
+        }
+    del done["datePublished"]  
+
+    done["creator"]["entityType"] = "Personal"
+    done["creator"]["entityName"] = done["creator"]["name"]
+    if not isinstance(done["creator"], list):
+        done["creators"] = [done["creator"]]
+    else:
+        done["creators"] = done["creator"]
+    del done["creator"]
+
+    done["publisher"] = {
+        "entityName": done["creators"][0]["affiliation"]["name"],
+        "entityType": "Organizational"
+    }
+
+    if done["resource"].find("/") > 0:
+        typ, subtyp = tuple(done["resource"].split("/", 1))
+        done["resource"] = typ
+        done["resourceType"] = subtyp
+
+    done["description"] = done["description"].replace("\n", "<br>")
+    done["descriptions"] = [done["description"]]
+    del done["description"]
+
+    print("after transforming: {}".format(done))
 
     try:
         del done["@context"]
@@ -97,8 +120,4 @@ def from_jsonld(req):
     except:
         pass
 
-    data = {"data": {"type": "nodes", "attributes": done}}
-
-    logger.debug("after transformation data: {}".format(data))
-
-    return data
+    return done
