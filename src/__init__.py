@@ -6,7 +6,8 @@ from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 import requests
 from werkzeug.exceptions import abort
 
-import logging, os
+import logging
+import os
 
 log_level = os.environ.get("LOGLEVEL", "DEBUG")
 logger = logging.getLogger("")
@@ -35,7 +36,8 @@ def bootstrap(name="MicroService", *args, **kwargs):
     for oai in list_openapi:
         app.add_api(
             oai,
-            resolver=MultipleResourceResolver("api", collection_endpoint_name="index"),
+            resolver=MultipleResourceResolver(
+                "api", collection_endpoint_name="index"),
             validate_responses=True,
         )
 
@@ -43,11 +45,7 @@ def bootstrap(name="MicroService", *args, **kwargs):
 
 
 def register_service(
-    servicename: str,
-    authorize_url: str,
-    refresh_url: str,
-    client_id: str,
-    client_secret: str,
+    servicename: str
 ):
     tokenStorage = os.getenv("CENTRAL_SERVICE_TOKEN_STORAGE")
     if tokenStorage is None:
@@ -68,12 +66,14 @@ def register_service(
 
     if response.status_code != 200:
         raise Exception(
-            "Cannot find and register Token Storage, msg:\n{}".format(response.text)
+            "Cannot find and register Token Storage, msg:\n{}".format(
+                response.text)
         )
 
     response = response.json()
     if response["success"]:
-        logger.info(f"Registering {servicename} in token storage was successful.")
+        logger.info(
+            f"Registering {servicename} in token storage was successful.")
         return True
 
     logger.error(
@@ -83,4 +83,4 @@ def register_service(
     return False
 
 
-app = bootstrap("PortOSF", all=True)
+app = bootstrap("PortDatasafe", all=True)
