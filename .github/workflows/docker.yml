@@ -24,6 +24,12 @@ jobs:
       - name: Test with pytest
         run: |
           make test
+      - name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: heiss/port_datasafe # list of Docker images to use as base name for tags
+          tag-sha: true # add git short SHA as Docker tag
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -37,8 +43,8 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          push: true
-          tags: heiss/port_datasafe:latest,heiss/port_datasafe:'$GITHUB_RUN_NUMBER'
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
           cache-from: type=registry,ref=heiss/port_datasafe:latest
           cache-to: type=inline
           build-args: |
