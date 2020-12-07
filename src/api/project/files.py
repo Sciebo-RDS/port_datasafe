@@ -11,15 +11,12 @@ logger = logging.getLogger()
 
 
 # FIXME: all endpoints need server tests, but POST cannot currently be tested through pactman, because it only supports json as content type
-@require_api_key
 def index(project_id):
-    return jsonify(g.osf.project(project_id).storage().files)
+    raise NotImplementedError()
 
 
-@require_api_key
 def get(project_id, file_id):
-    fileslist = list(g.osf.project(project_id).storage().files)
-    return jsonify(fileslist[file_id])
+    raise NotImplementedError()
 
 
 def post(project_id):
@@ -68,20 +65,9 @@ def post(project_id):
     return jsonify({"success": True}), 200
 
 
-@require_api_key
 def patch(project_id, file_id):
     raise NotImplementedError()
 
 
-@require_api_key
 def delete(project_id, file_id=None):
-    if file_id is None:
-        try:
-            for file in g.osf.project(project_id).storage().files:
-                file.remove()
-
-            return "", 200
-        except:
-            return abort(500)
-
     raise NotImplementedError()
