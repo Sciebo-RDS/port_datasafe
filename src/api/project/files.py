@@ -45,7 +45,7 @@ def post(project_id):
 
     token = loadAccessToken(req["userId"], "Owncloud")
     url = os.getenv("OWNCLOUD_INSTALLATION_PATH")
-    url = "{}/index.php/apps/rds/mailAddress".format(url)
+    url = "{}/index.php/apps/rds/informations".format(url)
 
     headers = {"Authorization": "Bearer {}".format(token)}
     email = request.get(url, headers=headers).json().get("email")
