@@ -27,13 +27,14 @@ def loadAccessToken(userId: str, service: str) -> str:
     logger.debug(f"got: {access_token}")
 
     if "type" in access_token and access_token["type"].endswith("Token"):
+        username = access_token["data"]["user"]["data"]["username"]
         access_token = access_token["data"]["access_token"]
 
     logger.debug(
-        "userId: {}, token: {}, service: {}".format(userId, access_token, service)
+        "userId: {}, token: {}, service: {}".format(username, access_token, service)
     )
 
-    return access_token
+    return username, access_token
 
 
 def require_api_key(api_method):

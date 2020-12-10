@@ -4,7 +4,7 @@ from requests_jwt import JWTAuth, payload_path, payload_method, payload_body
 from lib.Util import from_jsonld, loadAccessToken
 
 class Datasafe():
-    def __init__(self, metadata, token, folder, public_key, private_key, address=None):
+    def __init__(self, email, token, metadata, folder, public_key, private_key, address=None):
         self.email = email
         if "@" not in self.email:
             raise ValueError("email not valid.")

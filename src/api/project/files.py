@@ -43,16 +43,12 @@ def post(project_id):
         .decode("UTF-8")
     )
 
-    token = loadAccessToken(req["userId"], "Owncloud")
-    url = os.getenv("OWNCLOUD_INSTALLATION_PATH")
-    url = "{}/index.php/apps/rds/informations".format(url)
-
-    headers = {"Authorization": "Bearer {}".format(token)}
-    email = request.get(url, headers=headers).json().get("email")
+    email, token = loadAccessToken(req["userId"], "Datasafe")
 
     datasafe = Datasafe(
         email,
         token,
+        metadata,
         req["folder"],
         os.getenv("DATASAFE_PUBLICKEY"),
         os.getenv("DATASAFE_PRIVATEKEY")
