@@ -1,8 +1,6 @@
 from connexion_plus import App, MultipleResourceResolver, Util
 
 import json
-from jaeger_client import Config as jConfig
-from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 import requests
 from werkzeug.exceptions import abort
 
@@ -30,8 +28,6 @@ def bootstrap(name="MicroService", *args, **kwargs):
         del kwargs["address"]
 
     app = App(name, *args, **kwargs)
-
-    app.app.osf_address = osf_address
 
     for oai in list_openapi:
         app.add_api(
