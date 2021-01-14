@@ -19,8 +19,6 @@ class Datasafe():
         if not str(self.folder).startswith("/"):
             self.folder = "/" + self.folder
 
-        self.metadata = None
-
         self._public_key = public_key
         self._private_key = private_key
 
