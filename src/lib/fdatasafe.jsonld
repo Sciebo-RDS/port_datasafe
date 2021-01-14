@@ -3,13 +3,16 @@
         "https://w3id.org/ro/crate/1.0/context",
         {
             "@vocab": "https://schema.org/",
+            "zenodocategory": "https://www.research-data-services.org/jsonld/zenodocategory",
             "resource": "zenodocategory"
         }
     ],
     "@explicit": "true",
     "@type": "Dataset",
     "name": {},
-    "creators": {
+    "datePublished": {},
+    "description": {},
+    "creator": {
         "@type": "Person",
         "affiliation": {
             "@type": "Organization"
@@ -21,10 +24,5 @@
             "@type": "Organization"
         }
     },
-    "resource": {},
-    "publicationYear": {
-        "dateTime": {},
-        "dateTimeScheme": "COMPLETE_DATE",
-        "dateType": "Submitted"
-    }
+    "resource": {}
 }
