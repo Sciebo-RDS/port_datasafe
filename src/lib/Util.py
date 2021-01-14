@@ -79,23 +79,30 @@ def from_jsonld(jsonld_data):
     done = jsonld.frame(jsonld_data, frame)
     logger.debug("after framing: {}".format(done))
 
+    
     done["titles"] = [{"title": done["name"]}]
     del done["name"]
 
-
-    done["publicationYear"]: {
+    done["publicationYear"] = {
             "dateTime": done["datePublished"],
             "dateTimeScheme": "COMPLETE_DATE",
             "dateType": "Submitted"
         }
     del done["datePublished"]  
 
-    done["creator"]["entityType"] = "Personal"
-    done["creator"]["entityName"] = done["creator"]["name"]
     if not isinstance(done["creator"], list):
-        done["creators"] = [done["creator"]]
-    else:
-        done["creators"] = done["creator"]
+        done["creator"] = [done["creator"]]
+
+    done["creators"] = []
+
+    for creator in done["creator"]:
+        data = {
+            "entityType": "Personal",
+            "entityName": creator["name"]
+        }
+        data.update(creator)
+        done["creators"].append(data)
+
     del done["creator"]
 
     done["publisher"] = {
