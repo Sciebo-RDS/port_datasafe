@@ -77,7 +77,7 @@ def from_jsonld(jsonld_data):
         frame = json.load(open("lib/fdatasafe.jsonld"))
 
     done = jsonld.frame(jsonld_data, frame)
-    print("after framing: {}".format(done))
+    logger.debug("after framing: {}".format(done))
 
     done["titles"] = [{"title": done["name"]}]
     del done["name"]
@@ -112,7 +112,7 @@ def from_jsonld(jsonld_data):
     done["descriptions"] = [done["description"]]
     del done["description"]
 
-    print("after transforming: {}".format(done))
+    logger.debug("after transforming: {}".format(done))
 
     try:
         del done["@context"]

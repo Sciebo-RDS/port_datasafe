@@ -8,7 +8,7 @@
     ],
     "@explicit": "true",
     "@type": "Dataset",
-    "titles": [],
+    "name": {},
     "creators": {
         "@type": "Person",
         "affiliation": {
