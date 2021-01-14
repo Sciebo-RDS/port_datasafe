@@ -13,10 +13,10 @@ class Datasafe():
         self.folder = folder
         self.address = address or "https://datasafe-dev.uni-muenster.de"
 
-        if self.folder.endsWith("/"):
+        if str(self.folder).endswith("/"):
             self.folder = self.folder[:-1]
         
-        if not self.folder.startsWith("/"):
+        if not str(self.folder).startswith("/"):
             self.folder = "/" + self.folder
 
         self.metadata = None
