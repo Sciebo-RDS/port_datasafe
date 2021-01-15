@@ -1,7 +1,10 @@
 import requests
+import logging
 import jwt
 from requests_jwt import JWTAuth, payload_path, payload_method, payload_body
 from lib.Util import from_jsonld, loadAccessToken
+
+logger = logging.getLogger()
 
 class Datasafe():
     def __init__(self, email, token, metadata, folder, public_key, private_key, address=None):
@@ -65,5 +68,6 @@ class Datasafe():
         }
 
         req = self._session.post("{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data, verify=False)
+        logger.debug("got datasafe content: {}".format(req.content))
 
-        return jwt.decode(req.content, self._public_key, algorithms=self._session.auth.alg)
+        return jwt.decode(req.text, self._public_key, algorithms=self._session.auth.alg)
