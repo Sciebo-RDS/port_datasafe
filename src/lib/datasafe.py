@@ -64,6 +64,6 @@ class Datasafe():
             "metadata": self._metadata
         }
 
-        req = self._session.post("{}/big-file-transfer/api/v1/transfer/start".format(self.address), data=data, verify=False)
+        req = self._session.post("{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data, verify=False)
 
-        return jwt.decode(req.text(), self._public_key, algorithms=self._session.auth.alg)
+        return jwt.decode(req.content, self._public_key, algorithms=self._session.auth.alg)
