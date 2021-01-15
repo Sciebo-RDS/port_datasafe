@@ -6,6 +6,7 @@ from lib.Util import from_jsonld, loadAccessToken
 
 logger = logging.getLogger()
 
+
 class Datasafe():
     def __init__(self, email, token, metadata, folder, public_key, private_key, address=None):
         self.email = email
@@ -18,7 +19,7 @@ class Datasafe():
 
         if str(self.folder).endswith("/"):
             self.folder = self.folder[:-1]
-        
+
         if not str(self.folder).startswith("/"):
             self.folder = "/" + self.folder
 
@@ -34,7 +35,10 @@ class Datasafe():
             "administrativeMetadata": {
                 "authorizedPersons": [metadata["creators"][0]],
                 "curatingPersons": [metadata["creators"][0]],
-                "dataSupplier": [metadata["creators"][0]]
+                "dataSupplier": [metadata["creators"][0]],
+                "ingestDate": metadata["publicationYear"],
+                "fileMetadataList": [],
+                "identifier": {"identifierType": "Handle", "value": "wwurdm/XYZ"},
             }
         }
 
@@ -51,7 +55,7 @@ class Datasafe():
     @property
     def metadata(self):
         return self._metadata
-    
+
     def triggerUploadForProject(self):
         if self._metadata is None or not isinstance(self._metadata, dict):
             raise ValueError("metadata is not set.")
@@ -67,7 +71,10 @@ class Datasafe():
             "metadata": self._metadata
         }
 
-        req = self._session.post("{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data, verify=False)
+        logger.debug("send data: {}".format(data))
+
+        req = self._session.post(
+            "{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data, verify=False)
         logger.debug("got datasafe content: {}".format(req.content))
 
         return jwt.decode(req.text, self._public_key, algorithms=self._session.auth.alg)
