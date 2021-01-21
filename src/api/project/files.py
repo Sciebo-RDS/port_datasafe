@@ -2,7 +2,7 @@ import logging
 import os
 import json
 import requests
-from lib.Util import loadAccessToken
+from RDS import Util
 from lib.datasafe import Datasafe
 from flask import jsonify, request, g, abort
 from io import BytesIO, BufferedReader
@@ -43,11 +43,13 @@ def post(project_id):
         .decode("UTF-8")
     )
 
-    email, token = loadAccessToken(req["userId"], "Datasafe")
+    token = Util.loadToken(req["userId"], "Datasafe")
+    email = token.user.username
+    password = token.access_token
 
     datasafe = Datasafe(
         email,
-        token,
+        password,
         metadata,
         req["folder"],
         os.getenv("DATASAFE_PUBLICKEY"),

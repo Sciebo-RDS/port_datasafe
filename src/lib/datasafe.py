@@ -2,7 +2,8 @@ import requests
 import logging
 import jwt
 from requests_jwt import JWTAuth, payload_path, payload_method, payload_body
-from lib.Util import from_jsonld, loadAccessToken
+from lib.Util import from_jsonld
+from RDS import Util
 
 logger = logging.getLogger()
 
