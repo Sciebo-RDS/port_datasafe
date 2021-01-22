@@ -19,13 +19,12 @@ def require_api_key(api_method):
         except:
             req = request.form.to_dict()
 
-        apiKey = req.get("apiKey")
-        userId = req.get("userId")
+        service, userId, apiKey = Util.parseUserId(req.get("userId"))
 
         logger.debug("req data: {}".format(req))
 
         if apiKey is None and userId is not None:
-            apiKey = Util.loadToken(userId, "Owncloud")
+            apiKey = Util.loadToken(userId, "Owncloud").access_token
 
         if apiKey is None:
             logger.error("apiKey or userId not found.")
