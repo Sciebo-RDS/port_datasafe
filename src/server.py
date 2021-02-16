@@ -5,7 +5,7 @@ import os
 
 from RDS import Util, LoginService, FileTransferMode, FileTransferArchive
 service = LoginService(
-    servicename="Datasafe",
+    servicename="port-datasafe",
     implements=["metadata"],
     fileTransferMode=FileTransferMode.passive,
     fileTransferArchive=FileTransferArchive.none,
