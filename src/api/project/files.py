@@ -43,7 +43,7 @@ def post(project_id):
         .decode("UTF-8")
     )
 
-    token = Util.loadToken(req["userId"], "Datasafe")
+    token = Util.loadToken(req["userId"], "port-datasafe")
     email = token.user.username
     password = token.access_token
 

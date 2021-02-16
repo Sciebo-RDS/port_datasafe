@@ -24,7 +24,7 @@ def require_api_key(api_method):
         logger.debug("req data: {}".format(req))
 
         if apiKey is None and userId is not None:
-            apiKey = Util.loadToken(userId, "Owncloud").access_token
+            apiKey = Util.loadToken(userId, "port-owncloud").access_token
 
         if apiKey is None:
             logger.error("apiKey or userId not found.")
