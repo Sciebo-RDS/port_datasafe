@@ -12,11 +12,11 @@ logger = logging.getLogger()
 
 # FIXME: all endpoints need server tests, but POST cannot currently be tested through pactman, because it only supports json as content type
 def index(project_id):
-    raise NotImplementedError()
+    abort(500)
 
 
 def get(project_id, file_id):
-    raise NotImplementedError()
+    abort(500)
 
 
 def post(project_id):
@@ -64,8 +64,8 @@ def post(project_id):
 
 
 def patch(project_id, file_id):
-    raise NotImplementedError()
+    abort(500)
 
 
 def delete(project_id, file_id=None):
-    raise NotImplementedError()
+    abort(500)
