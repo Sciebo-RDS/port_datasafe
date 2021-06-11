@@ -9,6 +9,7 @@ from RDS import Util
 
 logger = logging.getLogger()
 
+
 def require_api_key(api_method):
     @wraps(api_method)
     def check_api_key(*args, **kwargs):
@@ -50,16 +51,15 @@ def from_jsonld(jsonld_data):
     done = jsonld.frame(jsonld_data, frame)
     logger.debug("after framing: {}".format(done))
 
-    
     done["titles"] = [{"title": done["name"]}]
     del done["name"]
 
     done["publicationYear"] = {
-            "dateTime": done["datePublished"],
-            "dateTimeScheme": "COMPLETE_DATE",
-            "dateType": "Submitted"
-        }
-    del done["datePublished"]  
+        "dateTime": done["datePublished"],
+        "dateTimeScheme": "COMPLETE_DATE",
+        "dateType": "Submitted"
+    }
+    del done["datePublished"]
 
     if not isinstance(done["creator"], list):
         done["creator"] = [done["creator"]]
