@@ -15,7 +15,8 @@ service = LoginService(
                  "de": "datasafe ist ein Service der WWU Münster zum Archivieren von Forschungsdaten. Mit Hilfe von datasafe können Sie ihre Forschungsdaten mit beschreibenden Metadaten anreichern und den resultierenden Datensatz für zehn Jahre auf Servern der WWU archivieren."},
     infoUrl="https://datasafe-dev.uni-muenster.de/",
     helpUrl="https://datasafe-dev.uni-muenster.de/datasafe/frequently_asked_questions",
-    icon="./datasafe.svg"
+    icon="./datasafe.svg",
+    displayName="Datasafe",
 )
 Util.register_service(service)
 
