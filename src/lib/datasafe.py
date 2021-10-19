@@ -1,11 +1,60 @@
 import requests
 import logging
 import jwt
-from requests_jwt import JWTAuth, payload_path, payload_method, payload_body
-from lib.Util import from_jsonld
-from RDS import Util
+from requests_jwt import JWTAuth
 
 logger = logging.getLogger()
+
+
+def parse_rocrate(res):
+    creator = []
+
+    if not isinstance(res["creator"], list):
+        res["creator"] = [res["creator"]]
+
+    for c in res["creator"]:
+        if isinstance(c, str):
+            creator.append({
+                "name": c
+            })
+        else:
+            creator.append(c)
+
+    creators = [{
+        "entityName": c["name"],
+        "entityType": "Personal",
+        "dateOfBirth": "",
+    } for c in creator]
+
+    result = {
+        "description": res["description"].replace("\n", "<br>"),
+        "creators": creators,
+        "contributors": creators,
+        "doi": {
+            "identifierType": "DOI",
+            "value": ""
+        },
+        "publicationYear": {
+            "dateTime": res["datePublished"],
+            "dateTimeScheme": "COMPLETE_DATE",
+            "dateType": "Submitted"
+        },
+        "publisher": {
+            "entityName": creator[0]["affiliation"],
+            "entityType": "Organizational"
+        },
+        "resource": {"resource": "", "resourceType": ""},
+        "titles": [{"title": res["name"]}],
+    }
+
+    if res["zenodocategory"].find("/") > 0:
+        typ, subtyp = tuple(res["zenodocategory"].split("/", 1))
+        result["resource"] = {
+            "resource": typ,
+            "resourceType": subtyp
+        }
+
+    return result
 
 
 class Datasafe():
@@ -29,17 +78,20 @@ class Datasafe():
 
         auth = JWTAuth(self._private_key, alg='HS256')
 
-        metadata = from_jsonld(metadata)
+        metadata = parse_rocrate(metadata)
 
         self._metadata = {
             "dataCiteMetadata": metadata,
             "administrativeMetadata": {
+                "acceptedAGBVersion": "string",
+                "bagitPrefix": "wwurdm/",
+                "completeSize": 0,
                 "authorizedPersons": [metadata["creators"][0]],
                 "curatingPersons": [metadata["creators"][0]],
                 "dataSupplier": [metadata["creators"][0]],
                 "ingestDate": metadata["publicationYear"],
                 "fileMetadataList": [],
-                "identifier": {"identifierType": "Handle", "value": "wwurdm/XYZ"},
+                "identifier": {"identifierType": "DOI", "value": ""},
             }
         }
 
