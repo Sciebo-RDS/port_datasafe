@@ -43,7 +43,10 @@ def parse_rocrate(res):
             "entityName": creator[0]["affiliation"],
             "entityType": "Organizational"
         },
-        "resource": {"resource": "", "resourceType": ""},
+        "resource": {
+            "resource": "Research data",
+            "resourceType": "Dataset"
+        },
         "titles": [{"title": res["name"]}],
     }
 
