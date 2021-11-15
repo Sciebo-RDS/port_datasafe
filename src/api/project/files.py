@@ -28,6 +28,9 @@ def post(project_id):
 
     try:
         service, userId, password = Util.parseUserId(req["userId"])
+        if service != "port-datasafe":
+            logger.debug("got wrong service token")
+            raise ValueError
     except:
         token = Util.loadToken(req["userId"], "port-datasafe")
         userId = token.user.username
