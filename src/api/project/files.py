@@ -26,9 +26,16 @@ def post(project_id):
     except:
         req = request.form.to_dict()
 
+    try:
+        service, userId, password = Util.parseUserId(req["userId"])
+    except:
+        token = Util.loadToken(req["userId"], "port-datasafe")
+        userId = token.user.username
+        password = token.access_token
+
     data = {
         "filepath": "{}/ro-crate-metadata.json".format(req["folder"]),
-        "userId": req["userId"]
+        "userId": userId
     }
 
     metadata = json.loads(
@@ -43,12 +50,8 @@ def post(project_id):
         .decode("UTF-8")
     )
 
-    token = Util.loadToken(req["userId"], "port-datasafe")
-    email = token.user.username
-    password = token.access_token
-
     datasafe = Datasafe(
-        email,
+        userId,
         password,
         metadata,
         req["folder"],
