@@ -8,9 +8,9 @@ import logging
 import os
 
 log_level = os.environ.get("LOGLEVEL", "DEBUG")
-logger = logging.getLogger("")
-logging.getLogger("").handlers = []
+logging.getLogger().handlers = []
 logging.basicConfig(format="%(asctime)s %(message)s", level=log_level)
+logger = logging.getLogger()
 
 
 def bootstrap(name="MicroService", *args, **kwargs):

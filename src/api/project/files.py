@@ -40,7 +40,7 @@ def post(project_id):
 
     data = {
         "filepath": "{}/ro-crate-metadata.json".format(req["folder"]),
-        "userId": userId
+        "userId": req["username"]
     }
 
     metadata = json.loads(
