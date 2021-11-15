@@ -21,9 +21,9 @@ def get(project_id, file_id):
 
 def post(project_id):
     # trigger upload on datasafe
-    try:
-        req = request.get_json(force=True, cache=True)
-    except:
+    req = request.get_json(force=True, silent=True, cache=True)
+    
+    if req is None:
         req = request.form.to_dict()
 
     logger.debug("got request body: {}", req)
