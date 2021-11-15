@@ -26,12 +26,14 @@ def post(project_id):
     except:
         req = request.form.to_dict()
 
+    logger.debug("got request body: {}", req)
+
     try:
         service, userId, password = Util.parseUserId(req["userId"])
         if service != "port-datasafe":
             logger.debug("got wrong service token")
             raise ValueError
-    except:
+    except ValueError:
         token = Util.loadToken(req["userId"], "port-datasafe")
         userId = token.user.username
         password = token.access_token
