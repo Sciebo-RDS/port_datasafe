@@ -43,6 +43,8 @@ def post(project_id):
         "userId": req["username"]
     }
 
+    logger.debug("send data: {}".format(data))
+
     metadata = json.loads(
         BytesIO(
             requests.get(
@@ -54,6 +56,8 @@ def post(project_id):
         .read()
         .decode("UTF-8")
     )
+
+    logger.debug("got metadata: {}".format(metadata))
 
     datasafe = Datasafe(
         userId,
