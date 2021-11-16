@@ -73,10 +73,10 @@ def post(project_id):
     )
 
     logger.debug("Trigger file upload")
-    datasafe.triggerUploadForProject()
-    logger.debug("Finished trigger")
+    success = datasafe.triggerUploadForProject()
+    logger.debug(f"Finished trigger, result was: {success}")
 
-    return jsonify({"success": True}), 200
+    return jsonify({"success": success}), 200 if success else 500
 
 
 def patch(project_id, file_id):
