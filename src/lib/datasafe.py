@@ -133,4 +133,4 @@ class Datasafe():
             "{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data, verify=False)
         logger.debug("got datasafe content: {}".format(req.content))
 
-        return jwt.decode(req.text, self._public_key, algorithms=self._session.auth.alg)
+        return req.status_code < 300
