@@ -2,11 +2,11 @@ FROM python:3.8
 EXPOSE 8080
 
 # set the base installation, requirements are not changed often
-RUN pip install --upgrade pip setuptools wheel
+RUN pip install --upgrade pip setuptools wheel pipenv
 
 WORKDIR /app
-ADD ./requirements.txt ./datasafe.svg ./
-RUN pip install -r requirements.txt
+ADD ./requirements.txt ./Pipfile ./Pipfile.lock ./datasafe.svg ./
+RUN pipenv install --system
 
 ENV OPENAPI_MULTIPLE_FILES      "interface_port_metadata.yml"
 
