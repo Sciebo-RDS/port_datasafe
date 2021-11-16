@@ -503,14 +503,6 @@
             "index": "pypi",
             "version": "==2.25.1"
         },
-        "requests-jwt": {
-            "hashes": [
-                "sha256:3937445a36c7cae75c9d5866ae13ac8ec9ed00ff41fb6dfa8073a4473029396c",
-                "sha256:4df3606a22c27b2dc4edad0ae6e83868945ca564f7ca49f82e4fd768fea6f879"
-            ],
-            "index": "pypi",
-            "version": "==0.5.3"
-        },
         "research-data-services-common": {
             "extras": [
                 "flask"

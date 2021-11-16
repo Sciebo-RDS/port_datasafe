@@ -1,7 +1,7 @@
 import requests
 import logging
 import jwt
-from requests_jwt import JWTAuth
+from .requests_jwt import JWTAuth
 
 logger = logging.getLogger()
 

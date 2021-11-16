@@ -16,7 +16,6 @@ connexion = {extras = ["swagger-ui"],version = "*"}
 connexion-plus = "*"
 pyld = "*"
 research-data-services-common = {extras = ["flask"], version = ">=0.48"}
-requests-jwt = "*"
 openapi-spec-validator = "<0.3"
 
 [requires]
