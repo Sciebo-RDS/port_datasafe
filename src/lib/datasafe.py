@@ -50,12 +50,13 @@ def parse_rocrate(res):
         "titles": [{"title": res["name"]}],
     }
 
+    """ # Disable this part, maybe use it later for new profileschemas
     if res["zenodocategory"].find("/") > 0:
         typ, subtyp = tuple(res["zenodocategory"].split("/", 1))
         result["resource"] = {
             "resource": typ,
             "resourceType": subtyp
-        }
+        } """
 
     return result
 
