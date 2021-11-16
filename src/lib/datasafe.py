@@ -6,7 +6,7 @@ from .requests_jwt import JWTAuth
 logger = logging.getLogger()
 
 
-def parse_rocrate(res):
+def parse_rocrate(res, email):
     creator = []
 
     if not isinstance(res["creator"], list):
@@ -25,6 +25,22 @@ def parse_rocrate(res):
         "entityType": "Personal",
         "dateOfBirth": "",
     } for c in creator]
+
+    res = []
+    for c in creators:
+        splitName = c["entityName"].split(" ", 1)
+        acc = email.split("@")[0]
+
+        c.update({
+            "account": acc,
+            "entityName": "{}, {}".format(splitName[1], splitName[0]),
+            "familyName": splitName[1],
+            "givenName": splitName[0],
+            "emailAddress": email
+        })
+
+        res.append(c)
+    creators = res
 
     result = {
         "description": res["description"].replace("\n", "<br>"),
@@ -82,7 +98,7 @@ class Datasafe():
 
         auth = JWTAuth(self._private_key, alg='HS256')
 
-        metadata = parse_rocrate(metadata)
+        metadata = parse_rocrate(metadata, email)
 
         self._metadata = {
             "dataCiteMetadata": metadata,
@@ -131,7 +147,7 @@ class Datasafe():
         logger.debug("send data: {}".format(data))
 
         req = self._session.post(
-            "{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data, verify=False)
+            "{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data)
         logger.debug("got datasafe content: {}".format(req.content))
 
         return req.status_code < 300
