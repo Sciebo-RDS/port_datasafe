@@ -66,7 +66,7 @@ def post(project_id):
     datasafe = Datasafe(
         userId,
         password,
-        doc,
+        doc.getElement(doc.rootIdentifier, expand=True, clean=True),
         req["folder"],
         os.getenv("DATASAFE_PUBLICKEY"),
         os.getenv("DATASAFE_PRIVATEKEY")
