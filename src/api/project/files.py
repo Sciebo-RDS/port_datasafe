@@ -2,7 +2,8 @@ import logging
 import os
 import json
 import requests
-from RDS import Util
+from RDS import Util, ROParser
+
 from lib.datasafe import Datasafe
 from flask import jsonify, request, g, abort
 from io import BytesIO, BufferedReader
@@ -22,7 +23,7 @@ def get(project_id, file_id):
 def post(project_id):
     # trigger upload on datasafe
     req = request.get_json(force=True, silent=True, cache=True)
-    
+
     if req is None:
         req = request.form.to_dict()
 
@@ -58,11 +59,14 @@ def post(project_id):
     )
 
     logger.debug("got metadata: {}".format(metadata))
+    doc = ROParser(metadata)
+
+    logger.debug("parsed metadata: {}".format(doc))
 
     datasafe = Datasafe(
         userId,
         password,
-        metadata,
+        doc,
         req["folder"],
         os.getenv("DATASAFE_PUBLICKEY"),
         os.getenv("DATASAFE_PRIVATEKEY")
