@@ -26,7 +26,7 @@ def parse_rocrate(res, email):
         "dateOfBirth": "",
     } for c in creator]
 
-    res = []
+    templCreator = []
     for c in creators:
         splitName = c["entityName"].split(" ", 1)
         acc = email.split("@")[0]
@@ -39,8 +39,8 @@ def parse_rocrate(res, email):
             "emailAddress": email
         })
 
-        res.append(c)
-    creators = res
+        templCreator.append(c)
+    creators = templCreator
 
     result = {
         "description": res["description"].replace("\n", "<br>"),
