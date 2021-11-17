@@ -149,16 +149,8 @@ class Datasafe():
 
         logger.debug("send data: {}".format(data))
 
-        req = requests.Request(
-            "POST", "{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data)
-
-        r = req.prepare()
-
-        logger.debug(
-            "prepared request: header: {}\nbody: {}".format(r.headers, r.body))
-
-        req = self._session.send(r)
-
+        req = self._session.post(
+            "{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data)
         logger.debug("got datasafe content: {}".format(req.content))
 
         return req.status_code < 300

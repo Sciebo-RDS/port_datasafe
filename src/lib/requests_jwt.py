@@ -7,14 +7,15 @@ import jwt
 
 
 __all__ = [
-        'JWTAuth',
-        'payload_method',
-        'payload_path',
-        'payload_body',
-        ]
+    'JWTAuth',
+    'payload_method',
+    'payload_path',
+    'payload_body',
+]
 
 
-payload_method = lambda req: req.method
+def payload_method(req): return req.method
+
 """
 A generator that will include the request method in the JWT payload.
 >>> auth = JWTAuth('secret')
@@ -22,7 +23,8 @@ A generator that will include the request method in the JWT payload.
 """
 
 
-payload_path = lambda req: req.path_url
+def payload_path(req): return req.path_url
+
 """
 A generator that will include the request's path ('/blah/index.html') in the
 JWT payload.
@@ -43,9 +45,9 @@ def payload_body(req):
 
     if req.method in ('POST', 'PUT'):
         return {
-                'hash': hashlib.sha256(to_hash).hexdigest(),
-                'alg': 'sha256',
-                }
+            'hash': hashlib.sha256(to_hash).hexdigest(),
+            'alg': 'sha256',
+        }
 
 
 class JWTAuth(AuthBase):
@@ -68,6 +70,7 @@ class JWTAuth(AuthBase):
     See the documentation of :mod:`PyJWT` for the list of available
     algorithms.
     """
+
     def __init__(self, secret, alg='HS256', header_format='JWT token="%s"'):
         self.secret = secret
         self.alg = alg
@@ -105,7 +108,7 @@ class JWTAuth(AuthBase):
         and interprets this field.
         """
         self.add_field('exp',
-                lambda req: int(time.time() + secs))
+                       lambda req: int(time.time() + secs))
 
     def set_header_format(self, new_format):
         """
@@ -140,6 +143,6 @@ class JWTAuth(AuthBase):
         payload = self._generate(request)
         #import pdb; pdb.set_trace()
         token = jwt.encode(payload, self.secret, self.alg)
-    
+
         request.headers['Authorization'] = self._header_format % token
         return request
