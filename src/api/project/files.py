@@ -65,13 +65,18 @@ def post(project_id):
 
     logger.debug("parsed metadata: {}".format(doc))
 
+    publickey = os.getenv("DATASAFE_PUBLICKEY")
+    privatekey = os.getenv("DATASAFE_PRIVATEKEY")
+
+    logger.debug(f"used publickey {publickey},\nprivatekey {privatekey}")
+
     datasafe = Datasafe(
         userId,
         owncloud_token.access_token,
         doc.getElement(doc.rootIdentifier, expand=True, clean=True),
         req["folder"],
-        os.getenv("DATASAFE_PUBLICKEY"),
-        os.getenv("DATASAFE_PRIVATEKEY")
+        publickey,
+        privatekey
     )
 
     logger.debug("Trigger file upload")
