@@ -41,10 +41,10 @@ def post(project_id):
 
     owncloud_token = Util.loadToken(req["username"], "port-owncloud")
 
-    data = {
-        "filepath": "{}/ro-crate-metadata.json".format(req["folder"]),
-        "userId": Util.parseToken(owncloud_token)
-    }
+    data = Util.parseToken(owncloud_token)
+    data.update({
+        "filepath": "{}/ro-crate-metadata.json".format(req["folder"])
+    })
 
     logger.debug("send data: {}".format(data))
 
