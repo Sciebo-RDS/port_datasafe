@@ -36,7 +36,10 @@ def parse_rocrate(res, email):
             "entityName": "{}, {}".format(splitName[1], splitName[0]),
             "familyName": splitName[1],
             "givenName": splitName[0],
-            "emailAddress": email
+            "emailAddress": email,
+            "local": True,
+            "nameIdentifiers": [],
+            "salutation": "Herr"
         })
 
         templCreator.append(c)
@@ -108,7 +111,7 @@ class Datasafe():
                 "completeSize": 0,
                 "authorizedPersons": [metadata["creators"][0]],
                 "curatingPersons": [metadata["creators"][0]],
-                "dataSupplier": [metadata["creators"][0]],
+                "dataSupplier": metadata["creators"][0],
                 "ingestDate": metadata["publicationYear"],
                 "fileMetadataList": [],
                 "identifier": {"identifierType": "DOI", "value": ""},
