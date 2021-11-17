@@ -149,8 +149,10 @@ class Datasafe():
 
         logger.debug("send data: {}".format(data))
 
-        r = requests.Request(
+        req = requests.Request(
             "POST", "{}/big-file-transfer/api/v1/transfer/start".format(self.address), json=data)
+
+        r = req.prepare()
 
         logger.debug(
             "prepared request: header: {}\nbody: {}".format(r.headers, r.body))
