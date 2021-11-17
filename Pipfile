@@ -17,6 +17,7 @@ connexion-plus = "*"
 pyld = "*"
 research-data-services-common = {extras = ["flask"], version = ">=0.48"}
 openapi-spec-validator = "<0.3"
+pyjwt = "*"
 
 [requires]
 python_version = "3.8"
