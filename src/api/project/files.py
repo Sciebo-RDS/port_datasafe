@@ -39,9 +39,11 @@ def post(project_id):
         userId = token.user.username
         password = token.access_token
 
+    owncloud_token = Util.loadToken(req["username"], "port-owncloud")
+
     data = {
         "filepath": "{}/ro-crate-metadata.json".format(req["folder"]),
-        "userId": req["username"]
+        "userId": Util.parseToken(owncloud_token)
     }
 
     logger.debug("send data: {}".format(data))
@@ -65,7 +67,7 @@ def post(project_id):
 
     datasafe = Datasafe(
         userId,
-        password,
+        owncloud_token.access_token,
         doc.getElement(doc.rootIdentifier, expand=True, clean=True),
         req["folder"],
         os.getenv("DATASAFE_PUBLICKEY"),
