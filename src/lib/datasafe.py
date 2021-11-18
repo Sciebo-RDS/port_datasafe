@@ -125,6 +125,7 @@ class Datasafe():
         auth.add_field("aud", "wallet")
         auth.add_field("preferred_username", self.email.split("@")[0])
         auth.add_field("groups", ["RegistrationManager", "ds-user"])
+        auth.expire(15)
 
         self._session = requests.Session()
         self._session.auth = auth
