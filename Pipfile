@@ -12,12 +12,12 @@ pytest-cov = "*"
 requests = "*"
 jaeger-client = "*"
 gevent = "*"
-connexion = {extras = ["swagger-ui"],version = "*"}
+connexion = {extras = ["swagger-ui"], version = "*"}
 connexion-plus = "*"
 pyld = "*"
 research-data-services-common = {extras = ["flask"], version = ">=0.48"}
 openapi-spec-validator = "<0.3"
-pyjwt = "*"
+pyjwt = {extras = ["crypto"], version = "*"}
 
 [requires]
 python_version = "3.8"
