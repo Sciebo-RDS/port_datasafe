@@ -12,8 +12,8 @@ pytest-cov = "*"
 requests = "*"
 jaeger-client = "*"
 gevent = "*"
-connexion = {extras = ["swagger-ui"], version = "*"}
-connexion-plus = "*"
+connexion = {extras = ["swagger-ui"], version = "==2.7.0"}
+connexion-plus = {version = "==0.41"}
 pyld = "*"
 research-data-services-common = {extras = ["flask"], version = ">=0.48"}
 openapi-spec-validator = "<0.3"
