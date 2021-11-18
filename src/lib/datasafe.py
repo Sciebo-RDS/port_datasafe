@@ -99,7 +99,7 @@ class Datasafe():
         self._public_key = public_key
         self._private_key = private_key
 
-        auth = JWTAuth(self._public_key, alg='RS256',
+        auth = JWTAuth(self._private_key, alg='RS256',
                        header_format="Bearer %s")
 
         metadata = parse_rocrate(metadata, email)
