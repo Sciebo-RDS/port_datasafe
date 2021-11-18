@@ -1,6 +1,6 @@
 import requests
 import logging
-import jwt
+import time
 from .requests_jwt import JWTAuth
 
 logger = logging.getLogger()
@@ -125,7 +125,8 @@ class Datasafe():
         auth.add_field("aud", "wallet")
         auth.add_field("preferred_username", self.email.split("@")[0])
         auth.add_field("groups", ["RegistrationManager", "ds-user"])
-        auth.expire(15)
+        auth.add_field("nbf", int(time.time()))
+        auth.expire(60*5)
 
         self._session = requests.Session()
         self._session.auth = auth

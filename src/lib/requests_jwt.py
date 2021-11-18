@@ -109,6 +109,7 @@ class JWTAuth(AuthBase):
         """
         self.add_field('exp',
                        lambda req: int(time.time() + secs))
+        self.add_field("iat", lambda req: int(time.time()))
 
     def set_header_format(self, new_format):
         """
