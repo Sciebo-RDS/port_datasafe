@@ -109,7 +109,7 @@ class Datasafe():
             "value": self.get_handle()
         }
 
-        metadata["doi"] = handle
+        #metadata["doi"] = handle
         metadata["handle"] = handle
 
         self._metadata = {
