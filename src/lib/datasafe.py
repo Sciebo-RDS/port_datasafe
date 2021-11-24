@@ -161,7 +161,7 @@ class Datasafe():
                 "directory": parse.quote(self.folder),
                 "port": 443,
                 "protocol": "WEBDAV",
-                "serverName": "https://sciebords.uni-muenster.de",
+                "serverName": "https://sciebords.uni-muenster.de/remote.php/webdav",
                 "token": "Bearer {}".format(self.token)
             },
             "metadata": self._metadata
