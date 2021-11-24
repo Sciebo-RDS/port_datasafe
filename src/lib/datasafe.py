@@ -1,3 +1,4 @@
+from urllib import parse
 import requests
 import logging
 import time
@@ -157,7 +158,7 @@ class Datasafe():
 
         data = {
             "accessInfo": {
-                "directory": self.folder,
+                "directory": parse.quote(self.folder),
                 "port": 443,
                 "protocol": "WEBDAV",
                 "serverName": "https://sciebords.uni-muenster.de",
