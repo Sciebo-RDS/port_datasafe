@@ -145,7 +145,7 @@ class Datasafe():
 
     def get_handle(self, prefix="sciebords"):
         data = {
-            prefix: prefix
+            "prefix": prefix
         }
         req = requests.get(
             "{}/generator-service/api/v1".format(self.address), params=data)
