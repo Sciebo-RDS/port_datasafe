@@ -104,6 +104,14 @@ class Datasafe():
 
         metadata = parse_rocrate(metadata, email)
 
+        handle = {
+            "identifierType": "Handle",
+            "value": self.get_handle()
+        }
+
+        metadata["doi"] = handle
+        metadata["handle"] = handle
+
         self._metadata = {
             "dataCiteMetadata": metadata,
             "administrativeMetadata": {
@@ -134,6 +142,14 @@ class Datasafe():
     @property
     def metadata(self):
         return self._metadata
+
+    def get_handle(self, prefix="sciebords"):
+        data = {
+            prefix: prefix
+        }
+        req = requests.get(
+            "{}/generator-service/api/v1".format(self.address), params=data)
+        return "{}/{}".format(prefix, req.text)
 
     def triggerUploadForProject(self):
         if self._metadata is None or not isinstance(self._metadata, dict):
