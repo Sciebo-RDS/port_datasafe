@@ -116,7 +116,7 @@ class Datasafe():
             "dataCiteMetadata": metadata,
             "administrativeMetadata": {
                 "acceptedAGBVersion": "string",
-                "bagitPrefix": "wwurdm/",
+                "bagitPrefix": "sciebords/",
                 "completeSize": 0,
                 "authorizedPersons": [metadata["creators"][0]],
                 "curatingPersons": [metadata["creators"][0]],
