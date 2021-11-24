@@ -148,7 +148,7 @@ class Datasafe():
             "prefix": prefix
         }
         req = requests.get(
-            "{}/generator-service/api/v1".format(self.address), params=data)
+            "{}/generator-service/api/v1/niss".format(self.address), params=data)
         return "{}/{}".format(prefix, req.text)
 
     def triggerUploadForProject(self):
