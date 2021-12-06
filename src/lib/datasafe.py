@@ -152,16 +152,25 @@ class Datasafe():
             "{}/generator-service/api/v1/niss".format(self.address), params=data)
         return "{}/{}".format(prefix, req.text)
 
+    def getStatus(self):
+        req = self._session.post(
+            "{}/big-file-transfer/api/v1/transfer/status".format(self.address))
+        logger.debug("got datasafe content: {}".format(req.content))
+        return req.status_code < 300
+
     def triggerUploadForProject(self):
         if self._metadata is None or not isinstance(self._metadata, dict):
             raise ValueError("metadata is not set.")
+
+        if not str(self.folder).startswith("/remote.php/webdav"):
+            self.folder = f"/remote.php/webdav/{self.folder}"
 
         data = {
             "accessInfo": {
                 "directory": parse.quote(self.folder),
                 "port": 443,
                 "protocol": "WEBDAV",
-                "serverName": "https://sciebords.uni-muenster.de/remote.php/webdav",
+                "serverName": "https://sciebords.uni-muenster.de",
                 "token": "Bearer {}".format(self.token)
             },
             "metadata": self._metadata
