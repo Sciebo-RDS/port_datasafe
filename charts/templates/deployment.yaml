@@ -23,10 +23,6 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          - name: "DATASAFE_ADDRESS"
-            value: "{{ .Values.environment.ADDRESS }}"
-          - name: "OWNCLOUD_INSTALLATION_PATH"
-            value: "{{ .Values.environment.OWNCLOUD_INSTALLATION_PATH }}"
           - name: "DATASAFE_PUBLICKEY"
             valueFrom:
               secretKeyRef:
@@ -39,11 +35,13 @@ spec:
                 key: privateKey.pem
           envFrom:
           - configMapRef:
-              name: mservice
+            name: mservice
           - configMapRef:
-              name: proxy
+            name: proxy
           - configMapRef:
-              name: globalenvvar
+            name: globalenvvar
+          - configMapRef:
+            name: portdatasafeconfig
           ports:
             - name: http
               containerPort: 8080

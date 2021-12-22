@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: portdatasafeconfig
+data:
+    DATASAFE_ADDRESS: {{ .Values.environment.ADDRESS | quote }}
+    OWNCLOUD_INSTALLATION_PATH: {{ .Values.environment.OWNCLOUD_INSTALLATION_PATH | quote }}
