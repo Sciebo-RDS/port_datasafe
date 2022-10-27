@@ -35,13 +35,13 @@ spec:
                 key: privateKey.pem
           envFrom:
           - configMapRef:
-            name: mservice
+              name: mservice
           - configMapRef:
-            name: proxy
+              name: proxy
           - configMapRef:
-            name: globalenvvar
+              name: globalenvvar
           - configMapRef:
-            name: portdatasafeconfig
+              name: portdatasafeconfig
           ports:
             - name: http
               containerPort: 8080
