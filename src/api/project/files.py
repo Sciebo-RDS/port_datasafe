@@ -14,12 +14,14 @@ repl = ".:"
 trans_tbl = "".maketrans(repl, "-" * len(repl))
 
 # load token from token storage, adjust the owncloud name to the naming scheme for multiple instances
-owncloud_servicename = "port-owncloud-".format(
-    os.getenv("OWNCLOUD_INSTALLATION_PATH"
-              .replace("https://", "")
-              .replace("/", "", 1))
-    .translate(trans_tbl)
-)
+servicename = os.getenv("OWNCLOUD_INSTALLATION_PATH".replace("https://", ""))
+
+if servicename.endswith("/"):
+    raise ValueError("given owncloud url cannot end with a slash /")
+if "/" in servicename:
+    raise ValueError("somewhere in the owncloud url is a slash. Do you use a folderlike url? We only support subdomains.")
+
+servicename = "port-owncloud-".format(servicename.translate(trans_tbl))
 
 
 # FIXME: all endpoints need server tests, but POST cannot currently be tested through pactman, because it only supports json as content type
@@ -50,7 +52,7 @@ def post(project_id):
         userId = token.user.username
         password = token.access_token
         
-    owncloud_token = Util.loadToken(req["username"], owncloud_servicename)
+    owncloud_token = Util.loadToken(req["username"], servicename)
 
     data = Util.parseToken(owncloud_token)
     data.update({
@@ -62,7 +64,7 @@ def post(project_id):
     metadata = json.loads(
         BytesIO(
             requests.get(
-                "http://layer1-{}/storage/file".format(owncloud_servicename),
+                "http://layer1-{}/storage/file".format(servicename),
                 json=data,
                 verify=(os.environ.get("VERIFY_SSL", "True") == "True"),
             ).content
