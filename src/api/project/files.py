@@ -10,6 +10,8 @@ from io import BytesIO, BufferedReader
 
 logger = logging.getLogger()
 
+repl = ".:"
+trans_tbl = "".maketrans(repl, "-" * len(repl))
 
 # FIXME: all endpoints need server tests, but POST cannot currently be tested through pactman, because it only supports json as content type
 def index(project_id):
@@ -38,8 +40,11 @@ def post(project_id):
         token = Util.loadToken(req["userId"], "port-datasafe")
         userId = token.user.username
         password = token.access_token
+        
+    # load token from token storage, adjust the owncloud name to the naming scheme for multiple instances
+    owncloud_servicename = os.getenv("OWNCLOUD_INSTALLATION_PATH".replace("https://", "").replace("/", "", 1)).translate(trans_tbl)
 
-    owncloud_token = Util.loadToken(req["username"], "port-owncloud")
+    owncloud_token = Util.loadToken(req["username"], owncloud_servicename)
 
     data = Util.parseToken(owncloud_token)
     data.update({
@@ -51,7 +56,7 @@ def post(project_id):
     metadata = json.loads(
         BytesIO(
             requests.get(
-                "http://circle1-{}/storage/file".format("port-owncloud"),
+                "http://layer1-{}/storage/file".format(owncloud_servicename),
                 json=data,
                 verify=(os.environ.get("VERIFY_SSL", "True") == "True"),
             ).content
