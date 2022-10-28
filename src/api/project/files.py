@@ -14,7 +14,7 @@ repl = ".:"
 trans_tbl = "".maketrans(repl, "-" * len(repl))
 
 # load token from token storage, adjust the owncloud name to the naming scheme for multiple instances
-servicename = os.getenv("OWNCLOUD_INSTALLATION_PATH".replace("https://", ""))
+servicename = os.getenv("OWNCLOUD_INSTALLATION_PATH").replace("https://", "")
 
 if servicename.endswith("/"):
     raise ValueError("given owncloud url cannot end with a slash /")
