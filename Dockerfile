@@ -10,7 +10,7 @@ RUN pipenv install --system
 
 ENV OPENAPI_MULTIPLE_FILES      "interface_port_metadata.yml"
 
-ADD "https://raw.githubusercontent.com/Sciebo-RDS/Sciebo-RDS/master/RDS/circle2_use_cases/interface_port_metadata.yml" ./
+ADD "https://raw.githubusercontent.com/Sciebo-RDS/Sciebo-RDS/develop/RDS/layer2_use_cases/interface_port_metadata.yml" ./
 
 # now add everything else, which changes often
 ADD src ./
