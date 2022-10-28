@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __init__ import app, register_service
+from __init__ import app
 import os
 
 from RDS import Util, LoginService, FileTransferMode, FileTransferArchive
